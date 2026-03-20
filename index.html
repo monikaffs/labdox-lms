@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labdox | Career Operating System</title>
+    <!-- We will link CSS and JS in the next steps -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Outfit:wght@700&display=swap"
+        rel="stylesheet">
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <!-- GLOBAL NAVIGATION -->
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <div class="logo-group" onclick="showView('home')">
+                <h1 class="logo">Labdox<span class="logo-dot">.</span><br><small>LMS</small></h1>
+            </div>
+
+            <!-- Dynamic Actions (Hidden until login) -->
+            <div id="nav-actions" class="nav-actions hidden">
+                <button class="nav-link" onclick="showView('catalog')">Course Catalog</button>
+                <button class="nav-link" onclick="showView('dashboard')">My Learning</button>
+                <button class="nav-link admin-only hidden" onclick="showView('admin')">Instructor Panel</button>
+
+                <div class="user-stats">
+                    <div class="xp-tracker">
+                        <div class="xp-pill" style="margin-bottom: 4px;">⚡ <span id="xp-count">0</span> XP</div>
+                        <div class="xp-progress-bar">
+                            <div class="xp-progress-fill" id="header-xp-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <div class="profile-avatar" id="user-avatar">?</div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <div id="auth-btns">
+                <button class="btn-outline" onclick="showView('login')">Initialize OS</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="app-container">
+
+        <!-- 1. HOME / LANDING VIEW -->
+        <section id="home-view" class="view">
+            <!-- ── HERO ── -->
+            <header class="hero">
+                <div class="hero-bg-grid"></div>
+                <div class="hero-orb hero-orb--1"></div>
+                <div class="hero-orb hero-orb--2"></div>
+                <div class="hero-content fade-in">
+                    <div class="hero-badge">
+                        <span class="badge-dot"></span>
+                        Now in Beta — Limited Spots
+                    </div>
+                    <h1>The <span class="highlight">Career OS</span><br>for Modern Learners</h1>
+                    <p>Labdox combines structured LMS, gamified learning, AI mentorship, and career readiness — all in
+                        one
+                        platform built for the next generation.</p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary btn-lg" onclick="showView('login')">Get Started</button>
+                        <button class="btn-ghost btn-lg" onclick="showView('catalog')">Explore Catalog</button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat"><span class="stat-num">5+</span><span class="stat-label">Roles
+                                Supported</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat"><span class="stat-num">AI</span><span class="stat-label">Powered Mentor</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Career Paths</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual fade-in delay-1">
+
+
+                    <div class="hero-card card-main">
+                        <div class="hcard-header">
+                            <div class="hcard-avatar">P</div>
+                            <div>
+                                <div class="hcard-name">Priya Sharma</div>
+                                <div class="hcard-role">Frontend Learner · Level 4</div>
+                            </div>
+                            <div class="hcard-badge-live">● LIVE</div>
+                        </div>
+                        <div class="hcard-xp-row">
+                            <span>720 / 1000 XP</span>
+                            <span class="hcard-streak">🔥 7 day streak</span>
+                        </div>
+                        <div class="a-bar-track" style="height: 10px; margin-top: 10px;">
+                            <div class="hcard-xp-fill" data-width="72"></div>
+                        </div>
+                        <div class="hcard-badges">
+                            <div class="hbadge earned">🎬</div>
+                            <div class="hbadge earned">🧠</div>
+                            <div class="hbadge earned">📝</div>
+                            <div class="hbadge">📡</div>
+                            <div class="hbadge">🏆</div>
+                        </div>
+                    </div>
+                    <div class="hero-card card-ai">
+                        <div class="ai-label">AI Assistant</div>
+                        <div class="ai-msg user-msg">How do I center a div?</div>
+                        <div class="ai-msg bot-msg">Use
+                            <code>display: flex; align-items: center; justify-content: center</code>
+                            on the parent 🎯
+                        </div>
+                    </div>
+                    <div class="hero-card card-cert">
+                        <div class="cert-icon">🎓</div>
+                        <div class="cert-text">React Fundamentals<br><small>Certificate Issued</small></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ── FEATURES ── -->
+            <section class="features" id="features">
+                <div class="section-header">
+                    <span class="section-tag reveal-up">Platform</span>
+                    <h2 class="section-title reveal-up" data-delay="100">Everything you need<br>to build a career.</h2>
+                </div>
+
+                <div class="features-grid">
+
+                    <div class="feature-card feature-card--large reveal-up" data-delay="0">
+                        <div class="feature-num">01</div>
+                        <div class="feature-icon">📚</div>
+                        <h3>Learning Management Engine</h3>
+                        <p>Structured courses with modules, lessons, videos, PDFs, quizzes, and assignments.
+                            Drag-and-drop
+                            CMS built for speed and flexibility.</p>
+                        <div class="feature-tags">
+                            <span>Course CMS</span><span>Drip Content</span><span>Video CDN</span>
+                        </div>
+                        <div class="feature-visual">
+                            <div class="lms-tree">
+                                <div class="lms-node course-node">📚 Course</div>
+                                <div class="lms-children">
+                                    <div class="lms-node module-node">📦 Module 1</div>
+                                    <div class="lms-leaves">
+                                        <div class="lms-node leaf-node">🎬 Video</div>
+                                        <div class="lms-node leaf-node">📄 PDF</div>
+                                        <div class="lms-node leaf-node">🧠 Quiz</div>
+                                        <div class="lms-node leaf-node">📝 Assignment</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card reveal-up" data-delay="100">
+                        <div class="feature-num">02</div>
+                        <div class="feature-icon">🎮</div>
+                        <h3>Gamification Engine</h3>
+                        <p>XP points, badges, levels, streaks and leaderboards that keep learners engaged every single
+                            day.
+                        </p>
+                        <div class="feature-tags">
+                            <span>XP System</span><span>Badges</span><span>Streaks</span>
+                        </div>
+                        <div class="xp-demo">
+                            <div class="xp-header">
+                                <span class="xp-level">Level 4 — Explorer</span>
+                                <span class="xp-pts">720 / 1000 XP</span>
+                            </div>
+                            <div class="a-bar-track" style="height: 12px; margin-top: 10px; margin-bottom: 1.5rem;">
+                                <div class="xp-fill" data-width="72"></div>
+                            </div>
+                            <div class="badges-row">
+                                <div class="badge-item earned" title="Video Watched">🎬</div>
+                                <div class="badge-item earned" title="Quiz Aced">🧠</div>
+                                <div class="badge-item earned" title="Assignment Done">📝</div>
+                                <div class="badge-item" title="Live Class">📡</div>
+                                <div class="badge-item" title="Module Complete">🏆</div>
+                            </div>
+                            <div class="streak-row"><span class="streak-fire">🔥</span><span>7-day streak active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card reveal-up" data-delay="200">
+                        <div class="feature-num">03</div>
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI Learning Assistant</h3>
+                        <p>AI doubt solving, resume analysis, interview practice, and assignment feedback — powered by
+                            course knowledge via vector search.</p>
+                        <div class="feature-tags">
+                            <span>OpenAI</span><span>Vector DB</span><span>RAG</span>
+                        </div>
+                        <div class="ai-chat-demo">
+                            <div class="chat-bubble user-bubble">How do I center a div in CSS?</div>
+                            <div class="chat-bubble bot-bubble" id="aiTypingDemo">
+                                <span class="typing-anim"><span></span><span></span><span></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card reveal-up" data-delay="300">
+                        <div class="feature-num">04</div>
+                        <div class="feature-icon">📡</div>
+                        <h3>Live Class Integration</h3>
+                        <p>Google Meet powered sessions, calendar sync, automated student reminders, and Drive-linked
+                            recordings.</p>
+                        <div class="feature-tags">
+                            <span>Google Meet</span><span>Calendar</span><span>Recordings</span>
+                        </div>
+                        <div class="live-demo">
+                            <div class="live-top">
+                                <div class="live-badge">● LIVE</div>
+                                <span class="live-viewers">24 enrolled</span>
+                            </div>
+                            <div class="live-info">
+                                <strong>React Advanced — Module 3</strong>
+                                <span>Starts in 12 min with Instructor Priya</span>
+                            </div>
+                            <div class="btn-join">Join Class →</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card reveal-up" data-delay="400">
+                        <div class="feature-num">05</div>
+                        <div class="feature-icon">⚡</div>
+                        <h3>Automation Layer</h3>
+                        <p>n8n, Make, and Zapier-powered automations for enrollment emails, reminders, certificate
+                            generation, and more.</p>
+                        <div class="feature-tags">
+                            <span>n8n</span><span>Zapier</span><span>Webhooks</span>
+                        </div>
+                        <div class="automation-demo">
+                            <div class="auto-flow">
+                                <div class="auto-step">Student Enrolls</div>
+                                <div class="auto-arrow">→</div>
+                                <div class="auto-step">Welcome Email</div>
+                            </div>
+                            <div class="auto-flow">
+                                <div class="auto-step">Course Done</div>
+                                <div class="auto-arrow">→</div>
+                                <div class="auto-step">🎓 Certificate</div>
+                            </div>
+                            <div class="auto-flow">
+                                <div class="auto-step">Live Scheduled</div>
+                                <div class="auto-arrow">→</div>
+                                <div class="auto-step">Reminder Sent</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card feature-card--full reveal-up" data-delay="0">
+                        <div class="feature-num">06</div>
+                        <div class="feature-icon">📊</div>
+                        <h3>Analytics & Reporting</h3>
+                        <p>Deep-dive dashboards tracking engagement, course completion, quiz scores, and assignment
+                            performance across every student.</p>
+                        <div class="feature-tags">
+                            <span>Completion Rates</span><span>Engagement</span><span>Performance</span><span>Quiz
+                                Scores</span><span>Assignment Tracking</span>
+                        </div>
+                        <div class="analytics-demo analytics-demo--wide">
+                            <div class="a-bar-item">
+                                <div class="a-bar-label">React Fundamentals</div>
+                                <div class="a-bar-track">
+                                    <div class="a-bar-fill" data-width="88">88%</div>
+                                </div>
+                            </div>
+                            <div class="a-bar-item">
+                                <div class="a-bar-label">Node.js Backend</div>
+                                <div class="a-bar-track">
+                                    <div class="a-bar-fill" data-width="72">72%</div>
+                                </div>
+                            </div>
+                            <div class="a-bar-item">
+                                <div class="a-bar-label">Python AI Intro</div>
+                                <div class="a-bar-track">
+                                    <div class="a-bar-fill" data-width="65">65%</div>
+                                </div>
+                            </div>
+                            <div class="a-bar-item">
+                                <div class="a-bar-label">SQL & Databases</div>
+                                <div class="a-bar-track">
+                                    <div class="a-bar-fill" data-width="91">91%</div>
+                                </div>
+                            </div>
+                            <div class="a-bar-item">
+                                <div class="a-bar-label">UI/UX Design</div>
+                                <div class="a-bar-track">
+                                    <div class="a-bar-fill" data-width="78">78%</div>
+                                </div>
+                            </div>
+                            <div class="a-bar-item">
+                                <div class="a-bar-label">DevOps Basics</div>
+                                <div class="a-bar-track">
+                                    <div class="a-bar-fill" data-width="55">55%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ── HOW IT WORKS ── -->
+            <section class="how-it-works" id="how-it-works">
+                <div class="section-header">
+                    <span class="section-tag reveal-up">Flow</span>
+                    <h2 class="section-title reveal-up" data-delay="100">From signup to<br>career-ready.</h2>
+                </div>
+                <div class="steps-container">
+                    <div class="step reveal-up" data-delay="0">
+                        <div class="step-number">01</div>
+                        <div class="step-content">
+                            <h3>Register & Onboard</h3>
+                            <p>Sign up via landing page, invite link, or bulk import. Google OAuth, email, or OTP — your
+                                choice.</p>
+                        </div>
+                    </div>
+                    <div class="step-connector-line reveal-up" data-delay="50"></div>
+                    <div class="step reveal-up" data-delay="100">
+                        <div class="step-number">02</div>
+                        <div class="step-content">
+                            <h3>Get Enrolled</h3>
+                            <p>Courses auto-assigned based on role. Drip content releases on time or completion
+                                triggers.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step-connector-line reveal-up" data-delay="150"></div>
+                    <div class="step reveal-up" data-delay="200">
+                        <div class="step-number">03</div>
+                        <div class="step-content">
+                            <h3>Learn & Earn XP</h3>
+                            <p>Watch videos, attend live classes, submit assignments. Every action earns XP and unlocks
+                                badges.</p>
+                        </div>
+                    </div>
+                    <div class="step-connector-line reveal-up" data-delay="250"></div>
+                    <div class="step reveal-up" data-delay="300">
+                        <div class="step-number">04</div>
+                        <div class="step-content">
+                            <h3>AI-Powered Growth</h3>
+                            <p>Get instant doubt resolution, resume analysis, interview practice, and personalized
+                                feedback.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step-connector-line reveal-up" data-delay="350"></div>
+                    <div class="step reveal-up" data-delay="400">
+                        <div class="step-number">05</div>
+                        <div class="step-content">
+                            <h3>Get Certified & Hired</h3>
+                            <p>Complete modules, earn certificates, and launch your career with a verified skill
+                                profile.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── TECH STACK ── -->
+            <section id="tech" class="tech-stack">
+                <h2 class="section-title fade-in">Recommended Tech Stack</h2>
+                <p class="section-subtitle fade-in">Built using a modern serverless + backend-as-a-service architecture.
+                </p>
+                <div class="tech-container">
+                    <div class="tech-category fade-in">
+                        <div class="tech-icon">⚛️</div>
+                        <h3>Frontend</h3>
+                        <ul>
+                            <li>Next.js</li>
+                            <li>React</li>
+                            <li>Tailwind CSS</li>
+                        </ul>
+                    </div>
+                    <div class="tech-category fade-in delay-1">
+                        <div class="tech-icon">🗄️</div>
+                        <h3>Backend & Hosting</h3>
+                        <ul>
+                            <li>Supabase (PostgreSQL + APIs)</li>
+                            <li>Node.js Server Functions</li>
+                            <li>Vercel</li>
+                        </ul>
+                    </div>
+                    <div class="tech-category fade-in delay-2">
+                        <div class="tech-icon">🤖</div>
+                        <h3>AI & Automation</h3>
+                        <ul>
+                            <li>OpenAI API</li>
+                            <li>Vector Database</li>
+                            <li>n8n / Zapier</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── ROLES ── -->
+            <section id="roles" class="roles">
+                <div class="roles-content fade-in">
+                    <h2>Role-Based Access</h2>
+                    <p>Every user type gets a tailored dashboard with the right tools and permissions.</p>
+                    <ul class="role-list">
+                        <li><span class="role-emoji">👨🎓</span><span class="role-name">Student</span></li>
+                        <li><span class="role-emoji">👨🏫</span><span class="role-name">Instructor</span></li>
+                        <li><span class="role-emoji">🤝</span><span class="role-name">Mentor</span></li>
+                        <li><span class="role-emoji">🛡️</span><span class="role-name">Admin</span></li>
+                        <li><span class="role-emoji">👑</span><span class="role-name">Super Admin</span></li>
+                    </ul>
+                </div>
+            </section>
+            </section>
+        </section>
+
+
+        <!-- 2. ONBOARDING / REGISTRATION FORM -->
+        <section id="login-view" class="view hidden">
+            <div class="form-wrapper">
+                <div class="glass-card auth-card">
+                    <h2>Onboarding Terminal</h2>
+                    <p>Enter your credentials to synchronize with the Career OS</p>
+
+                    <form id="registration-form" onsubmit="handleRegistration(event)">
+                        <div class="form-grid">
+                            <div class="input-field">
+                                <label>Full Name</label>
+                                <input type="text" id="reg-name" placeholder="Name" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Email Address</label>
+                                <input type="email" id="reg-email" placeholder="john@labdox.com" required>
+                            </div>
+                            <div class="input-field">
+                                <label>Phone Number</label>
+                                <input type="tel" id="reg-phone" placeholder="+91 98765 43210" required>
+                            </div>
+                            <div class="input-field">
+                                <label>System Role</label>
+                                <select id="reg-role">
+                                    <option value="Student">Student</option>
+                                    <option value="Instructor">Instructor / Mentor</option>
+                                    <option value="Admin">Administrator</option>
+                                </select>
+                            </div>
+                            <div class="input-field">
+                                <label>College / Organization</label>
+                                <input type="text" id="reg-college" placeholder="Institute Name">
+                            </div>
+                            <div class="input-field">
+                                <label>Academic Year</label>
+                                <select id="reg-year">
+                                    <option value="1st">1st Year</option>
+                                    <option value="2nd">2nd Year</option>
+                                    <option value="3rd">3rd Year</option>
+                                    <option value="4th">4th Year</option>
+                                    <option value="Professional">Professional</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-field full-width">
+                            <label>Primary Course Enrollment</label>
+                            <select id="reg-course" class="dropdown-main">
+                                <option value="Web Dev & AI">Full Stack Web Dev & AI Automation</option>
+                                <option value="Data Science">Advanced Data Science & Analytics</option>
+                                <option value="UI/UX Design">Product Design & UI/UX Strategy</option>
+                                <option value="Cyber Security">Cyber Security Operations</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-launch full-width">Launch Career OS</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. COURSE CATALOG (With Search) -->
+        <section id="catalog-view" class="view hidden">
+            <div class="catalog-header">
+                <div class="dash-welcome" style="margin-bottom: 0;">
+                    <h1>Course Catalog</h1>
+                    <p>Explore premium modules and sync your Career OS.</p>
+                </div>
+                <div class="search-container">
+                    <input type="text" id="course-search" placeholder="Search for modules (e.g. 'AI', 'Frontend')..." onkeyup="if(event.key === 'Enter') renderCatalog(this.value)">
+                    <button class="btn-search" onclick="renderCatalog(document.getElementById('course-search').value)">Search</button>
+                </div>
+            </div>
+            
+            <div id="catalog-grid" class="course-grid">
+                <!-- Courses injected by JS -->
+            </div>
+
+            <!-- Course Request Section -->
+            <div class="course-request-container">
+                <div class="glass-card request-card">
+                    <div class="request-content">
+                        <h3>Can't find the course you need?</h3>
+                        <p>Suggest a new topic or module, and we'll prioritize building it for our professional roadmap.</p>
+                    </div>
+                    <div class="request-form">
+                        <input type="text" id="course-request-input" placeholder="e.g. Advanced Rust, System Design, etc.">
+                        <button class="btn-enroll" onclick="submitCourseRequest()">Submit Request</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. STUDENT DASHBOARD (My Learning) -->
+        <section id="dashboard-view" class="view hidden">
+            <div class="dash-welcome">
+                <h1>Welcome back, <span id="display-name">Learner</span></h1>
+                <p>Your current progress is being tracked via Supabase.</p>
+            </div>
+            <div id="my-courses-grid" class="course-grid">
+                <!-- Enrolled courses only -->
+            </div>
+
+            <!-- Skills Analytics Section -->
+            <div class="skills-section">
+                <div class="dash-welcome" style="margin-top: 4rem; margin-bottom: 2rem;">
+                    <h2>Skills Analytics 📊</h2>
+                    <p>Your real-time competency matrix based on completed coursework.</p>
+                </div>
+                <div class="skills-card">
+                    <canvas id="skillsRadar"></canvas>
+                </div>
+            </div>
+
+            <!-- Achievements Section -->
+            <div class="achievements-section">
+                <div class="dash-welcome" style="margin-top: 4rem;">
+                    <h2>Professional Milestones</h2>
+                    <p>Unlock badges as you complete courses and earn XP.</p>
+                </div>
+                <h3 class="milestone-heading" id="earned-heading">Earned Badges 🏆</h3>
+                <div id="unlocked-milestones-grid" class="milestone-grid">
+                    <!-- Earned badges will be moved here -->
+                </div>
+
+                <h3 class="milestone-heading" id="locked-heading" style="margin-top: 3rem;">Locked Milestones 🔒</h3>
+                <div id="locked-milestones-grid" class="milestone-grid">
+                    <div class="milestone-card locked" id="milestone-quick-starter">
+                        <div class="milestone-icon">🎬</div>
+                        <div class="milestone-info">
+                            <strong>Quick Starter</strong>
+                            <small>Enrolled in 1st Course</small>
+                        </div>
+                    </div>
+                    <div class="milestone-card locked" id="milestone-xp-overlord">
+                        <div class="milestone-icon">⚡</div>
+                        <div class="milestone-info">
+                            <strong>XP Overlord</strong>
+                            <small>Reach 1000 XP</small>
+                        </div>
+                    </div>
+                    <div class="milestone-card locked" id="milestone-topic-master">
+                        <div class="milestone-icon">🧠</div>
+                        <div class="milestone-info">
+                            <strong>Topic Master</strong>
+                            <small>Complete 5 Modules</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ADVANCED COURSE PLAYER (The LMS Engine) -->
+        <section id="player-view" class="view hidden">
+            <div class="lms-layout">
+
+                <!-- LEFT SIDE: Curriculum Sidebar (approx 30-35%) -->
+                <aside class="curriculum-sidebar">
+                    <div class="sidebar-header">
+                        <h3>Course Curriculum</h3>
+                        <div class="progress-bar-container">
+                            <div id="course-progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <div id="curriculum-list" class="curriculum-items">
+                        <!-- Items here will look like buttons -->
+                        <button class="curr-item active">
+                            <span class="icon">▶</span>
+                            <div class="curr-text">
+                                <strong>1. Introduction</strong>
+                                <small>Video - 5 mins</small>
+                            </div>
+                        </button>
+
+                        <button class="curr-item">
+                            <span class="icon">📄</span>
+                            <div class="curr-text">
+                                <strong>2. Architecture PDF</strong>
+                                <small>Resource Download</small>
+                            </div>
+                        </button>
+
+                        <button class="curr-item">
+                            <span class="icon">❓</span>
+                            <div class="curr-text">
+                                <strong>3. Knowledge Check</strong>
+                                <small>Quiz - 10 Questions</small>
+                            </div>
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- RIGHT SIDE: Content Area (approx 65-70%) -->
+                <main class="content-view">
+                    <!-- Video Container (Requested 45% visual weight) -->
+                    <div class="video-frame">
+                        <iframe id="main-video" src="" allowfullscreen></iframe>
+                    </div>
+
+                    <div class="lesson-details">
+                        <h2 id="lesson-title">Lesson Title</h2>
+                        <div id="lesson-text">Select a module from the left to begin learning.</div>
+
+                        <!-- ADD THIS SECTION BELOW lesson-text -->
+                        <div id="module-action-area" class="module-actions hidden">
+                            <button class="btn-primary" id="btn-mark-complete" onclick="markModuleComplete()">Mark as
+                                Completed</button>
+                            <a id="pdf-download-link" href="#" class="btn-download hidden" download>
+                                <span>📥</span> Download PDF
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- QUIZ / ASSESSMENT SECTION -->
+                    <div id="assessment-container" class="glass-card hidden">
+                        <div class="quiz-header">
+                            <h3>Module Assessment</h3>
+                            <span id="quiz-timer"></span>
+                        </div>
+
+                        <div id="quiz-mount">
+                            <!-- JS will inject MCQ or Fill-in-the-blanks here -->
+                        </div>
+
+                        <button class="btn-primary" id="submit-quiz-btn">Submit and Earn XP</button>
+
+                        <!-- Final XP Result Result -->
+                        <div id="quiz-result" class="hidden">
+                            <div class="xp-animation">⚡</div>
+                            <h2 id="xp-result-text">Score: 0/0</h2>
+                            <p id="xp-added-msg">+0 XP Added to your Profile</p>
+                            <button class="btn-outline" onclick="resetCurrentModule()">Retry Module</button>
+                        </div>
+                    </div>
+                </main>
+
+            </div>
+        </section>
+
+        <!-- 6. INSTRUCTOR / ADMIN PANEL -->
+        <section id="admin-view" class="view hidden">
+            <div class="admin-grid">
+                <div class="glass-card">
+                    <h3>Course CMS</h3>
+                    <p>Create new modules and quizzes for students.</p>
+                    <div class="admin-form">
+                        <input type="text" id="new-module-name" placeholder="Module Title">
+                        <textarea id="new-module-desc" placeholder="Content description..."></textarea>
+                        <input type="text" id="new-module-video" placeholder="Video URL (YouTube/CDN)">
+                        <button class="btn-primary" onclick="createNewModule()">Publish Module</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GLOBAL FOOTER -->
+        <footer id="global-footer" class="footer">
+            <div class="footer-inner">
+                <div class="footer-grid">
+                    <!-- Column 1: Brand -->
+                    <div class="footer-col brand-col">
+                        <div class="footer-logo">Labdox<span class="logo-dot">.</span><br><small>LMS</small></div>
+                        <p>The Career Operating System for the Next Generation of Engineers. Built with AI-driven workflows and professional automation.</p>
+                        <div class="social-links">
+                            <a href="#">𝕏</a>
+                            <a href="#">💼</a>
+                            <a href="#">🐙</a>
+                            <a href="#">📸</a>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Platform -->
+                    <div class="footer-col">
+                        <h4>Platform</h4>
+                        <ul>
+                            <li><a href="#" onclick="showView('catalog')">Course Catalog</a></li>
+                            <li><a href="#" onclick="showView('dashboard')">My Learning</a></li>
+                            <li><a href="#" onclick="showView('login')">Initialize OS</a></li>
+                            <li><a href="#">Global Roles</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 3: Resources -->
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a>Documentation</a></li>
+                            <li><a>Help Center</a></li>
+                            <li><a>System Status</a></li>
+                            <li><a>AI Mentorship</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 4: Company -->
+                    <div class="footer-col">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a>About Us</a></li>
+                            <li><a>Careers</a></li>
+                            <li><a>Privacy Policy</a></li>
+                            <li><a>Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="footer-cta-section" class="footer-cta-card">
+                    <div class="cta-content">
+                        <h3>Ready to build the future of learning?</h3>
+                        <p>Join the next wave of Web Development & AI Automation Interns.</p>
+                    </div>
+                    <button onclick="showView('login')" class="btn-primary">Apply Now →</button>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>© 2026 Labdox. All rights reserved. Crafted for Engineers.</p>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Toasts / Notifications -->
+    <div id="toast-container"></div>
+
+    <!-- AI Mentor Chatbot UI -->
+    <div id="ai-mentor-btn" class="hidden" onclick="toggleAIChat()">
+        <span class="ai-mentor-icon">🤖</span>
+    </div>
+
+    <div id="ai-chat-window" class="hidden">
+        <div class="ai-chat-header">
+            <h4>Labdox AI Mentor</h4>
+            <button class="ai-close-btn" onclick="toggleAIChat()">✖</button>
+        </div>
+        <div class="ai-chat-body" id="ai-chat-body">
+            <div class="ai-msg bot-msg">Hello! I'm your AI learning assistant. Ask me anything about your current course or career path!</div>
+        </div>
+        <div class="ai-chat-input-area">
+            <input type="text" id="ai-chat-input" placeholder="Ask a question..." onkeyup="if(event.key === 'Enter') sendAIMessage()">
+            <button class="ai-send-btn" onclick="sendAIMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- 3rd Party: Canvas Confetti for Gamification -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- 3rd Party: Chart.js for Data Visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
